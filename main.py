@@ -11,9 +11,14 @@ import sys
 
 def main():
     pygame.init()
+    pygame.mixer.init()
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
+
+    pygame.mixer.music.load("assets/sounds/space_sound.ogg")
+    pygame.mixer.music.play(-1)
+
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0.0
