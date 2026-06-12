@@ -7,6 +7,7 @@ import pygame
 class Asteroid(CircleShape):
     def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
+        self.destruction_sound = pygame.mixer.Sound("assets/sounds/asteroid_destruction_sound.wav")
     
     def draw(self, screen):
         color = "white"
@@ -20,6 +21,7 @@ class Asteroid(CircleShape):
     
     def split(self):
         self.kill()
+        self.destruction_sound.play()
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
         log_event("asteroid_split")
