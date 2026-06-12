@@ -13,6 +13,7 @@ import sys
 def main():
     pygame.init()
     pygame.mixer.init()
+    points = pygame.font.SysFont("sans", 30)
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
@@ -21,6 +22,7 @@ def main():
     pygame.mixer.music.play(-1)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Fart-steroid")
     clock = pygame.time.Clock()
     dt = 0.0
 
@@ -49,7 +51,7 @@ def main():
             if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
-                print(calculate_points(destroyed))
+                print(f"You totalized {calculate_points(destroyed)} points")
                 sys.exit()
         for obj in drawable:
             obj.draw(screen)
@@ -60,6 +62,9 @@ def main():
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split(destroyed)
+        
+        displayed_points = points.render("Points: " + str(calculate_points(destroyed)), True, "white")
+        screen.blit(displayed_points, (30,0))
 
         pygame.display.flip()   
         dt = clock.tick(60) / 1000
