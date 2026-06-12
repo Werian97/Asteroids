@@ -9,7 +9,6 @@ class Player(CircleShape):
         self.rotation = 0
         self.cooldown = 0
         self.shot_sound = pygame.mixer.Sound("assets/sounds/shot_sound.wav")
-        print(self.shot_sound.get_volume())
     
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)

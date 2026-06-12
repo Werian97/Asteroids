@@ -5,7 +5,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
-from points import calculate_points
+from points import calculate_points, get_score
 import sys
 
 
@@ -39,7 +39,8 @@ def main():
 
     player = Player(SCREEN_WIDTH//2 , SCREEN_HEIGHT//2)
     asteroidfield = AsteroidField()
-    while True:
+    running = True
+    while running:
         log_state()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -50,9 +51,7 @@ def main():
         for asteroid in asteroids:
             if asteroid.collides_with(player):
                 log_event("player_hit")
-                print("Game over!")
-                print(f"You totalized {calculate_points(destroyed)} points")
-                sys.exit()
+                running = False
         for obj in drawable:
             obj.draw(screen)
         
@@ -68,6 +67,29 @@ def main():
 
         pygame.display.flip()   
         dt = clock.tick(60) / 1000
+
+    pygame.quit()
+    print("Game over!")
+    points = calculate_points(destroyed)
+    print(f"You totalized {points} points")
+    name = input("Enter your name: ")
+
+    with open("classifica.txt", "r") as file:
+        classifica = file.read()
+    classifica_lines = classifica.split("\n")
+    placement = 0
+    for line in classifica_lines:
+        if points <= get_score(line):
+            placement += 1
+        else:
+            break
+    point_line = f"{name}: {points}"
+    new_classifica_lines = classifica_lines[0:placement]
+    new_classifica_lines.append(point_line)
+    new_classifica_lines.extend(classifica_lines[placement:len(classifica_lines)-1])
+    new_classifica = "\n".join(new_classifica_lines)
+    with open("classifica.txt", "w") as file:
+        file.write(new_classifica)
 
 
 if __name__ == "__main__":
