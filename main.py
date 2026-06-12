@@ -5,6 +5,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from points import calculate_points
 import sys
 
 
@@ -32,6 +33,8 @@ def main():
     asteroids = pygame.sprite.Group()
     Asteroid.containers = (asteroids, updatable, drawable)
 
+    destroyed = pygame.sprite.Group()
+
     player = Player(SCREEN_WIDTH//2 , SCREEN_HEIGHT//2)
     asteroidfield = AsteroidField()
     while True:
@@ -46,6 +49,7 @@ def main():
             if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
+                print(calculate_points(destroyed))
                 sys.exit()
         for obj in drawable:
             obj.draw(screen)
@@ -55,7 +59,7 @@ def main():
                 if asteroid.collides_with(shot):
                     log_event("asteroid_shot")
                     shot.kill()
-                    asteroid.split()
+                    asteroid.split(destroyed)
 
         pygame.display.flip()   
         dt = clock.tick(60) / 1000

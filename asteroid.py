@@ -8,6 +8,7 @@ class Asteroid(CircleShape):
     def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
         self.destruction_sound = pygame.mixer.Sound("assets/sounds/asteroid_destruction_sound.wav")
+        self.points = 60 // self.radius
     
     def draw(self, screen):
         color = "white"
@@ -19,8 +20,9 @@ class Asteroid(CircleShape):
     def update(self, dt):
         self.position += self.velocity * dt
     
-    def split(self):
+    def split(self, destroyed):
         self.kill()
+        destroyed.add(self)
         self.destruction_sound.play()
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
